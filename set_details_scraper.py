@@ -29,8 +29,7 @@ keywords = [
 		]
 		
 
-def get_n_setdata(n):
-    set_numbers = get_random_set_numbers(n, set_number_filename)
+def get_sets(set_numbers):
     with open(output_table_filename, "a") as output_file:
         # Check if the file is empty and if so, write the header
         output_file.seek(0, os.SEEK_END)
@@ -51,6 +50,26 @@ def get_random_set_numbers(n, src_filename):
         else:
             return []
             
+def get_all_numbers(src_filename):
+    with open(src_filename, 'r') as file:
+        lines = file.readlines()
+        if lines:
+            return [line.strip() for line in lines]  # Strip newline characters
+        else:
+            return []
+
+def get_numbers_paged(src_filename, offset, limit):
+    with open(src_filename, 'r') as file:
+        lines = file.readlines()
+        start_index = offset
+        end_index = offset + limit
+
+        if start_index >= len(lines):
+            paged_lines = []
+        else:
+            paged_lines = lines[start_index:end_index]
+
+        return [line.strip() for line in paged_lines]  # Strip newline characters
 
 def get_setdata(id, records_file):
 	url = url_base + id + "/"
@@ -83,11 +102,12 @@ def get_setdata(id, records_file):
 	
 	
 	
-if len(sys.argv) > 1:
+if len(sys.argv) > 2:
     try:
-        n = int(sys.argv[1])
-        get_n_setdata(n)
+        offset = int(sys.argv[1])
+        limit = int(sys.argv[2])
+        get_sets(get_numbers_paged(set_number_filename, offset, limit))
     except ValueError:
         print("Argument is not a number!")
 else:
-    get_n_setdata(1)
+    get_sets(get_all_numbers(set_number_filename))
