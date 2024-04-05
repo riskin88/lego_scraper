@@ -25,7 +25,9 @@ keywords = [
 		"Annual growth",
 		"2023 growth",
 		"Rolling growth",
-		"Future growth"
+		"Future growth",
+		"Value",
+		"Range"
 		]
 		
 
